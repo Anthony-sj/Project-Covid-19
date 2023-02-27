@@ -6,7 +6,6 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 import numpy as np
 import folium
 
@@ -130,15 +129,15 @@ HeatMap(
 world_map
 
 
-# In[16]:
+# In[9]:
 
 
 #계산하기위해서 intiger로 변경
 merged_df=merged_df.dropna()
-merged_df.loc[:,['사망수','회복수','검사수','인구']] = merged_df[['사망수','회복수','검사수','인구']].astype(int)
+merged_df[['사망수','회복수','검사수','인구']] = merged_df[['사망수','회복수','검사수','인구']].astype(int).copy()
 
 
-# In[17]:
+# In[10]:
 
 
 merged_df['검사비율']=(merged_df['검사수']/merged_df['인구'])
@@ -157,14 +156,14 @@ plt.ylim(-20000,800000)
 plt.show()
 
 
-# In[18]:
+# In[12]:
 
 
 merged_df = merged_df[merged_df['검사수']>=6386235]
 merged_df
 
 
-# In[19]:
+# In[13]:
 
 
 plt.scatter(merged_df['검사비율'], merged_df['사망수'])
@@ -175,7 +174,7 @@ plt.ylim(-20000,800000)
 plt.show()
 
 
-# In[13]:
+# In[14]:
 
 
 def zscore(x):
@@ -183,17 +182,17 @@ def zscore(x):
     return z
 
 
-# In[14]:
+# In[15]:
 
 
 merged_df=merged_df.set_index('국가명')
 
 
-# In[15]:
+# In[16]:
 
 
-
-
+import matplotlib.pyplot as plt
+plt.rcParams['axes.unicode_minus'] = False
 zscore(merged_df['확진수'])
 
 zscore(merged_df['확진수']).plot(kind='bar', figsize=(30, 5))
@@ -203,22 +202,4 @@ plt.xlabel('Country',fontsize=20)
 plt.ylabel('z-score')
 plt.ylim(-1,8)
 plt.show()
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 
