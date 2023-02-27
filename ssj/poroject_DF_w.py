@@ -99,7 +99,7 @@ df1
 df2[df2.면적.isna( )]['국가명'].unique()
 
 
-# In[14]:
+# In[ ]:
 
 
 df2 = df2.set_index(['국가명'])
@@ -111,8 +111,9 @@ for b in df2.index:
 df2
 
 
-# In[ ]:
+# In[30]:
 
 
-
+df2.loc['Burundi']['면적'] = 27834
+df2
 
