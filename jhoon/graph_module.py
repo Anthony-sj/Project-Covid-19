@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[19]:
+# In[16]:
 
 
 import random
@@ -12,11 +12,11 @@ import numpy as np
 import pandas as pd
 import folium
 
-import Project_DF_SJ as sj
+import Project_DF_SJ_tot as sj
 import jhoon1 as jh
 
 
-# In[24]:
+# In[2]:
 
 
 # df_upper=sj.dfc_1
@@ -64,7 +64,7 @@ def bargraph(df):
 
     plt.style.use('Solarize_Light2')
     x1 = random5_df.index
-    y1 = random5_df['검사수율(%)']
+    y1 = random5_df['검사수율']
     ax1.bar(x1, y1,color=['#81F7BE','#F6CECE','#F6CEF5','#D0A9F5','#A9F5F2'],width=0.5)
     ax1.set_xlabel('나라')
     ax1.set_ylabel('검사수율',rotation=90)
@@ -73,7 +73,7 @@ def bargraph(df):
     ax1.set_title('나라별 검사률',fontweight='bold',fontsize=15,color='gray')
 
     x2 = random5_df.index
-    y2 = random5_df['확진수율(%)']
+    y2 = random5_df['확진수율']
     ax2.bar(x2, y2,color=['#81F7BE','#F6CECE','#F6CEF5','#D0A9F5','#A9F5F2'],width=0.5)
     ax2.set_xlabel('나라')
     ax2.set_ylabel('확진률',rotation=90)
@@ -82,13 +82,14 @@ def bargraph(df):
     ax2.set_title('나라별 확진률',fontweight='bold',fontsize=15,color='gray')
 
     x3 = random5_df.index
-    y3 = random5_df['사망수율(%)']
+    y3 = random5_df['사망수율']
     ax3.bar(x3, y3,color=['#81F7BE','#F6CECE','#F6CEF5','#D0A9F5','#A9F5F2'],width=0.5)
     ax3.set_xlabel('나라')
     ax3.set_ylabel('사망률',rotation=90)
     ax3.set_xticks(range(len(random5_df.index)))
     ax3.set_xticklabels(labels=random5_df.index,fontsize=10)
     ax3.set_title('나라별 사망률',fontweight='bold',fontsize=15,color='gray')
+
     plt.show()
 
 
@@ -98,7 +99,7 @@ def bargraph(df):
 #scatter 함수
 def scattergraph(merged_df): 
     plt.style.use('ggplot')
-    plt.scatter(merged_df['검사수율(%)'], merged_df['사망수율(%)'])
+    plt.scatter(merged_df['검사수율'], merged_df['사망수율'])
     plt.title('검사빈도에따른 전세계사망률')
     plt.xlabel('코로나 검사비율')
     plt.ylabel('사망률')
@@ -113,7 +114,7 @@ print(scattergraph(sj.df_data))
 
 
 
-# In[14]:
+# In[6]:
 
 
 df=sj.df_data.sort_values('인구밀도',ascending=False)
@@ -132,7 +133,7 @@ def mapdata(data):
 # 데이터프레임에서 위도와 경도, 인구밀도, 확진수 열 추출
     locations = data[['위도', '경도']].values.tolist()
     mildos = data['인구밀도'].tolist()
-    cases = data['확진수율(%)'].tolist()
+    cases = data['확진수율'].tolist()
 
 # 최대 총 확진자 수 계산
     max_cases = max(cases)
@@ -158,21 +159,21 @@ def mapdata(data):
     return world_map
 
 
-# In[17]:
+# In[8]:
 
 
 new_df = df.copy()
 new_df=new_df.drop(['S. Korea','Algeria'])
 
 
-# In[18]:
+# In[9]:
 
 
-new_df['확진수율(%)']=new_df['확진수율(%)'].pipe(jh.zscore)
+new_df['확진수율']=new_df['확진수율'].pipe(jh.zscore)
 mapdata(new_df)
 
 
-# In[27]:
+# In[10]:
 
 
 def mapworld(df):
@@ -188,5 +189,82 @@ def mapworld(df):
     )
 
     fig.show()
+
+
+# In[11]:
+
+
 mapworld(df)
+
+
+# In[12]:
+
+
+example_series = pd.Series([12, 15, 7, 13, 9], index = ['a', 'b', 'c', 'd', 'e'])
+colors = pd.Series(['gold', 'silver', 'cyan', 'purple', 'pink'], index = example_series.index)
+explode = pd.Series([0.2, 0.1, 0.05, 0, 0], index = example_series.index)
+
+plt.pie(example_series, labels = example_series.index, autopct = '%.1f%%', colors = colors, explode = explode)
+plt.show()
+
+
+# In[13]:
+
+
+random6_df = df.sample(n=6)
+
+
+# In[14]:
+
+
+
+# import pandas as pd
+# import matplotlib.pyplot as plt
+
+# plt.style.use('ggplot')   # 스타일 서식 지정
+# plt.rcParams['axes.unicode_minus']=False   # 마이너스 부호 출력 설정
+
+# df = df
+
+# df['검사수'] = df['사망수'].shift(1)
+# df['검사수'] = ((df['사망수'] / df['검사수']) - 1) * 100      
+
+# # 2축 그래프 그리기
+# ax1 = df[['사망수','검사수']].plot(kind='bar', figsize=(20, 10), width=0.7, stacked=True)  
+# ax2 = ax1.twinx()
+# ax2.plot(df.index, df.검사수, ls='--', marker='o', markersize=20, 
+#          color='green', label='전년대비 증감율')  
+
+# ax1.set_xlabel('', size=20)
+# ax1.set_ylabel('')
+# ax2.set_ylabel('')
+
+# plt.title('b', size=30)
+# ax1.legend(loc='best')
+
+# plt.show()
+
+
+# In[15]:
+
+
+jh.world_map1
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
 
