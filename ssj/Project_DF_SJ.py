@@ -35,6 +35,12 @@ df23 = df_case.sort_values(by ='Population')
 df23
 
 
+# In[ ]:
+
+
+
+
+
 # In[5]:
 
 
@@ -57,11 +63,16 @@ dfc0 = df_case.rename(columns={'Serial Number': '고유번호', 'Country' : '국
 print(dfc0.columns)
 
 
+# In[ ]:
+
+
+
+
+
 # In[7]:
 
 
 # 필요없는 자료열 제거
-dfc0.drop(['고유번호','현발병'], axis=1, inplace=True)
 
 
 # In[8]:
@@ -71,10 +82,32 @@ dfc0.drop(['고유번호','현발병'], axis=1, inplace=True)
 dfc0 = dfc0.replace(',','',regex=True) 
 dfc0 = dfc0.set_index(['국가명'])
 
+
+# In[9]:
+
+
+for i in dfc0.columns:
+    dfc0[i]=dfc0[i].astype('float')
+
+
+# In[10]:
+
+
+for a in dfc0.index:
+    if np.isnan(dfc0.loc[a,'회복수']):
+        dfc0.loc[a,'회복수'] = dfc0.loc[a,'확진수']-dfc0.loc[a,'사망수']
+dfc0
+
+
+# In[11]:
+
+
+dfc0.drop(['고유번호','현발병'], axis=1, inplace=True)
+dfc0
 dfc=dfc0.dropna()
 
 
-# In[9]:
+# In[12]:
 
 
 # 각 요소를 정수형으로 변환
@@ -82,20 +115,20 @@ for i in dfc.columns:
     dfc[i]=dfc[i].astype('int')
 
 
-# In[10]:
+# In[13]:
 
 
 # 자료숫자가 매우 적은 행(나라) 제거
 dfc.drop(dfc[dfc['인구']  < (dfc['인구'].mean()*0.05)].index, inplace=True)
 
 
-# In[11]:
+# In[14]:
 
 
 dfc
 
 
-# In[12]:
+# In[15]:
 
 
 dfc_fin = dfc.copy()
@@ -109,7 +142,7 @@ dfc_fin=dfc_fin.reset_index()
 dfc_fin
 
 
-# In[13]:
+# In[16]:
 
 
 # 면적과 위경도 데이터프레임 일괄 병합
@@ -120,7 +153,7 @@ dft = dft.set_index(['국가명'])
 dft
 
 
-# In[14]:
+# In[17]:
 
 
 # 일부 주요나라 누락자료(면적) 입력을 위한 딕셔너리 생성 - 수작업
@@ -128,7 +161,7 @@ C = {'UAE': 83600 , 'Hong Kong': 1114, 'UK':243610 , 'Czechia':78867, 'Italy':30
      'USA': 9830000,'Papua New Guinea': 452860, 'CAR' : 623000, 'DRC':2345408, 'Burundi' :  27834}
 
 
-# In[15]:
+# In[18]:
 
 
 # 누락된 면적 요소 삽입
@@ -137,7 +170,7 @@ for a in dft.index:
         dft.loc[a]['면적'] = C[a]
 
 
-# In[16]:
+# In[19]:
 
 
 # 국가별 누락 데이터 딕셔너리 (위경도)
@@ -146,7 +179,7 @@ dict_loc = {'UAE':[23.7139,54.3035], 'CAR': [6.5741,20.4869], 'DRC' : [-2.6046, 
             'UK' :[54.9817, -2.8012], 'S. Korea':[37.5666, 126.9780]}
 
 
-# In[17]:
+# In[20]:
 
 
 # 위경도 요소 삽입
@@ -158,20 +191,26 @@ for nat in dft.index:
 dft
 
 
-# In[18]:
+# In[21]:
 
 
 # 누락데이터 행 제거
 df_tot = dft.dropna()
 
 
-# In[19]:
+# In[ ]:
+
+
+
+
+
+# In[22]:
 
 
 df_tot
 
 
-# In[20]:
+# In[23]:
 
 
 # 확진률 (확진수/검사수)
@@ -192,7 +231,7 @@ for j in col_dict:
         
 
 
-# In[21]:
+# In[24]:
 
 
 # 정렬
@@ -200,7 +239,7 @@ df_tot = df_tot.sort_values(by='검사수율', ascending=False)
  
 
 
-# In[22]:
+# In[25]:
 
 
 def pop_den(df):  # 인구밀도 열 추가 함수
@@ -216,7 +255,7 @@ def pop_par(df):  # 감염율 열 추가 함수
     df['감염율'] = P
 
 
-# In[23]:
+# In[26]:
 
 
 pop_den(df_tot)
@@ -224,63 +263,63 @@ pop_par(df_tot)
 df_tot
 
 
-# In[24]:
+# In[27]:
 
 
 df_tot.info()
 
 
-# In[25]:
+# In[28]:
 
 
 df_tot.loc['총합'] = df_tot.iloc[:130,:5].sum()
 df_tot.loc['평균'] = df_tot.iloc[:130,:].mean()
 
 
-# In[26]:
+# In[29]:
 
 
 df_tot.head()
 
 
-# In[27]:
+# In[30]:
 
 
 df_data=df_tot.copy()
 df_data.drop(['총합','평균'],axis=0,inplace=True)
 
 
-# In[28]:
+# In[31]:
 
 
 df_data
 
 
-# In[29]:
+# In[32]:
 
 
 df_data.sort_values('확진수율')
 
 
-# In[30]:
+# In[33]:
 
 
 df_data.sort_values('사망수율')
 
 
-# In[31]:
+# In[34]:
 
 
 df_data.sort_values('검사수율')
 
 
-# In[32]:
+# In[35]:
 
 
 df_data.sort_values('인구밀도')
 
 
-# In[33]:
+# In[36]:
 
 
 df_data.사망수율.describe()
