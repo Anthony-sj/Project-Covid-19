@@ -325,10 +325,11 @@ df_data.sort_values('인구밀도')
 df_data.사망수율.describe()
 
 
-# In[ ]:
+# In[37]:
 
 
-
+df_data.to_csv('./df_data_137.csv')
+df_tot.to_csv('./df_tot_137.csv')
 
 
 # In[ ]:
